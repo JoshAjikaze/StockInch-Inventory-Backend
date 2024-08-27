@@ -55,7 +55,7 @@ This project is an Inventory Management System built with Django. It allows reta
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/Utee/inventory_app.git
+    git clone https://github.com/JoshAjikaze/StockInch-Inventory-Backend.git
     cd inventory_app
     ```
 
