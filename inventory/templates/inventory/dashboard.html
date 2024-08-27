@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1>Welcome to Your Dashboard</h1>
+    
+<!-- Create/Upload Button -->
+<form action="{% url 'upload_inventory' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="file">Upload Inventory List:</label>
+    <input type="file" id="file" name="file"><br><br>
+    <button type="submit">Upload</button>
+</form>
+<br>
+<a href="{% url 'create_inventory' %}"><button>Create Inventory</button></a>
+
+<hr>
+
+<!-- Update Button -->
+<a href="{% url 'update_inventory' %}"><button>Update Inventory</button></a>
+
+<hr>
+
+<!-- View Button -->
+<a href="{% url 'view_inventory' %}"><button>View Inventory</button></a>
+{% endblock %}

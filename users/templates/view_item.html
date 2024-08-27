@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ item.name }}</h1>
+<img src="{{ item.image.url }}" alt="{{ item.name }}">
+<p>{{ item.description }}</p>
+<p>Price: {{ item.price }}</p>
+<p>Stock: {{ item.stock }}</p>
+<p>Promotion: {{ item.promotion }}</p>
+<a href="{% url 'add_to_grocery_list' item.id %}">Add to Grocery List</a>
+{% endblock %}

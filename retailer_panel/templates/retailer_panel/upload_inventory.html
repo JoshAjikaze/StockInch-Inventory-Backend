@@ -1,0 +1,10 @@
+{% extends 'retailer_panel/base.html' %}
+{% block content %}
+<h1>Upload Inventory via CSV/TXT</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="file">Choose File:</label><br>
+    <input type="file" id="file" name="file"><br>
+    <button type="submit">Upload</button>
+</form>
+{% endblock %}

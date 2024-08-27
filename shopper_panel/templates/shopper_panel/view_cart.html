@@ -1,0 +1,19 @@
+{% extends 'shopper_panel/base.html' %}
+{% block content %}
+<h1>View Cart</h1>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+    </tr>
+    {% for item in cart_items %}
+    <tr>
+        <td>{{ item.inventory_item.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.inventory_item.price }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'shopper_panel:shopper_dashboard' %}">Back to Dashboard</a>
+{% endblock %}

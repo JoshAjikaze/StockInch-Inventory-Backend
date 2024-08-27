@@ -1,0 +1,58 @@
+{% extends "admin_panel/base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <p class="card-text">{{ total_users }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Total Active Users</h5>
+                <p class="card-text">{{ total_active_users }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Total Retailers</h5>
+                <p class="card-text">{{ total_retailers }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="card text-white bg-danger">
+            <div class="card-body">
+                <h5 class="card-title">Total Shoppers</h5>
+                <p class="card-text">{{ total_shoppers }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-sm-12 mb-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Total Products</h5>
+                <p class="card-text">{{ total_products }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 mb-3">
+        <div class="card text-white bg-secondary">
+            <div class="card-body">
+                <h5 class="card-title">Total Categories</h5>
+                <p class="card-text">{{ total_categories }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

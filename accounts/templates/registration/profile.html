@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+</head>
+<body>
+    <h1>Profile</h1>
+    <p>Name: {{ user.name }}</p>
+    <p>Email: {{ user.email }}</p>
+    <p>Phone Number: {{ user.phone_number }}</p>
+    <p>Address: {{ user.address }}</p>
+    <img src="{{ user.profile_picture.url }}" alt="Profile Picture" width="150" height="150">
+    <a href="{% url 'accounts:update_profile' %}">Edit Profile</a>
+</body>
+</html>

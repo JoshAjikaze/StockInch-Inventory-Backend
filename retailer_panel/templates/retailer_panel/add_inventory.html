@@ -1,0 +1,9 @@
+{% extends 'retailer_panel/base.html' %}
+{% block content %}
+<h1>Add Inventory</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add</button>
+</form>
+{% endblock %}

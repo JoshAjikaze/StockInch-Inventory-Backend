@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Add Inventory Item</h2>
+  <form method="post">
+    {% csrf_token %}
+    <!-- Add form fields for creating inventory items -->
+    <input type="text" name="name" placeholder="Name"><br>
+    <textarea name="description" placeholder="Description"></textarea><br>
+    <input type="text" name="price_range" placeholder="Price Range"><br>
+    <input type="text" name="location" placeholder="Location"><br>
+    <!-- Add more form fields as needed -->
+    <button type="submit">Create Inventory</button>
+</form>
+{% endblock %}

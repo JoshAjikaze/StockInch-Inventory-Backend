@@ -1,0 +1,22 @@
+{% extends 'retailer_panel/base.html' %}
+{% block content %}
+<h1>View Inventory</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Quantity</th>
+    </tr>
+    {% for item in inventory_items %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.quantity }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

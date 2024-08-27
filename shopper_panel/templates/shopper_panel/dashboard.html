@@ -1,0 +1,13 @@
+{% extends 'shopper_panel/base.html' %}
+{% block content %}
+<h1>Shopper Dashboard</h1>
+<p>Welcome, {{ user.name }}!</p>
+<p>Here are your shopping lists:</p>
+<ul>
+    {% for item in inventory_items %}
+        <li>
+            {{ item.name }} - <a href="{% url 'shopper_panel:add_to_cart' item.id %}">Add to Cart</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Retailer Panel{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'retailer_panel:dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'retailer_panel:add_inventory' %}">Add Inventory</a></li>
+                
+                <li><a href="{% url 'retailer_panel:view_inventory' %}">View Inventory</a></li>
+                <li><a href="{% url 'retailer_panel:upload_inventory' %}">Upload Inventory</a></li>
+                <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    
+</body>
+</html>

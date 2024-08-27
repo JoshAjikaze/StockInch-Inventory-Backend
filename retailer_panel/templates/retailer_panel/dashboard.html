@@ -1,0 +1,16 @@
+{% extends 'retailer_panel/base.html' %}
+{% block content %}
+<h1>Retailer Dashboard</h1>
+<p>Welcome, {{ user.name }}!</p>
+<a href="{% url 'retailer_panel:view_inventory' %}">View Inventory</a><br>
+<a href="{% url 'retailer_panel:add_inventory' %}">Add Inventory</a><br>
+<a href="{% url 'retailer_panel:upload_inventory' %}">Upload Inventory via CSV/TXT</a>
+
+<h2>Your Inventory</h2>
+<ul>
+    {% for item in inventory_items %}
+    <li>{{ item.name }} - <a href="{% url 'update_inventory' item.id %}">Edit</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Manage Inventory</h1>
+<a href="{% url 'create_inventory' %}">Add New Inventory Item</a>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Promotion</th>
+        <th>Actions</th>
+    </tr>
+    {% for item in inventory_items %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.stock }}</td>
+        <td>{{ item.promotion }}</td>
+        <td>
+            <a href="{% url 'update_inventory' item.id %}">Edit</a>
+            <a href="{% url 'delete_inventory' item.id %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

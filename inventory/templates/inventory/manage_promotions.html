@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Manage Promotions</h1>
+<a href="{% url 'create_promotion' %}">Add New Promotion</a>
+<table>
+    <tr>
+        <th>Item</th>
+        <th>Promotion Details</th>
+        <th>Actions</th>
+    </tr>
+    {% for promotion in promotions %}
+    <tr>
+        <td>{{ promotion.item.name }}</td>
+        <td>{{ promotion.details }}</td>
+        <td>
+            <a href="{% url 'update_promotion' promotion.id %}">Edit</a>
+            <a href="{% url 'delete_promotion' promotion.id %}">Delete</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

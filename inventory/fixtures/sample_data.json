@@ -1,0 +1,122 @@
+[
+    {
+        "model": "inventory.category",
+        "pk": 1,
+        "fields": {
+            "name": "Electronics",
+            "icon": null
+        }
+    },
+    {
+        "model": "inventory.category",
+        "pk": 2,
+        "fields": {
+            "name": "Food",
+            "icon": null
+        }
+    },
+    {
+        "model": "inventory.category",
+        "pk": 3,
+        "fields": {
+            "name": "Drinks",
+            "icon": null
+        }
+    },
+    {
+        "model": "inventory.inventoryitem",
+        "pk": 1,
+        "fields": {
+            "name": "Smartphone",
+            "description": "A high-quality smartphone.",
+            "price": "699.99",
+            "stock": 100,
+            "quantity": 0,
+            "category": 1,
+            "location": "Warehouse A",
+            "promotion": "",
+            "owner": null,
+            "image": "inventory_images/smartphone.jpg"
+        }
+    },
+    {
+        "model": "inventory.inventoryitem",
+        "pk": 2,
+        "fields": {
+            "name": "Laptop",
+            "description": "A powerful laptop for work and gaming.",
+            "price": "1200.00",
+            "stock": 50,
+            "quantity": 0,
+            "category": 1,
+            "location": "Warehouse B",
+            "promotion": "",
+            "owner": null,
+            "image": "inventory_images/laptop.jpg"
+        }
+    },
+    {
+        "model": "inventory.inventoryitem",
+        "pk": 3,
+        "fields": {
+            "name": "Bread",
+            "description": "Freshly baked bread.",
+            "price": "2.50",
+            "stock": 200,
+            "quantity": 0,
+            "category": 2,
+            "location": "Bakery Section",
+            "promotion": "",
+            "owner": null,
+            "image": "inventory_images/bread.jpg"
+        }
+    },
+    {
+        "model": "inventory.inventoryitem",
+        "pk": 4,
+        "fields": {
+            "name": "Cheese",
+            "description": "Organic cheese from the local farm.",
+            "price": "5.00",
+            "stock": 150,
+            "quantity": 0,
+            "category": 2,
+            "location": "Dairy Section",
+            "promotion": "",
+            "owner": null,
+            "image": "inventory_images/cheese.jpg"
+        }
+    },
+    {
+        "model": "inventory.inventoryitem",
+        "pk": 5,
+        "fields": {
+            "name": "Orange Juice",
+            "description": "Freshly squeezed orange juice.",
+            "price": "3.00",
+            "stock": 100,
+            "quantity": 0,
+            "category": 3,
+            "location": "Beverage Section",
+            "promotion": "",
+            "owner": null,
+            "image": "inventory_images/orange_juice.jpg"
+        }
+    },
+    {
+        "model": "inventory.inventoryitem",
+        "pk": 6,
+        "fields": {
+            "name": "Red Wine",
+            "description": "A bottle of fine red wine.",
+            "price": "15.00",
+            "stock": 75,
+            "quantity": 0,
+            "category": 3,
+            "location": "Wine Section",
+            "promotion": "",
+            "owner": null,
+            "image": "inventory_images/red_wine.jpg"
+        }
+    }
+]
