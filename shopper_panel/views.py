@@ -25,7 +25,7 @@ class ShopperDashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        cart_items = ShopperCart.objects.filter(user=request.user).count()
+        cart_items = ShopperCart.objects.filter(shopper=request.user).count()
         inventory_items = InventoryItem.objects.filter(stock__gt=0).count()
 
         response_data = {
