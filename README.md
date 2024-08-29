@@ -31,16 +31,21 @@ This project is an Inventory Management System built with Django. It allows reta
 - **Login**: `/accounts/api/login/`
 
 ### Retailer Panel
-- **Dashboard**: `/retailer-panel/dashboard/`
-- **Add Inventory**: `/retailer-panel/inventory/add/`
-- **Update Inventory**: `/retailer-panel/inventory/update/<int:item_id>/`
-- **Delete Inventory**: `/retailer-panel/inventory/delete/<int:item_id>/`
+- **Dashboard**: GET `/retailer-panel/dashboard/`
+- **Add Inventory**: POST `/retailer-panel/inventory/add/`
+- **List Inventory** GET `/retailer-panel/inventory/`
+- **Update Inventory**: PUT/PATCH `/retailer-panel/inventory/<int:pk>/`
+- **Delete Inventory**: DELETE `/retailer-panel/inventory/<int:pk>/`
 - **Upload Inventory**: `/api/upload-inventory/`
+- **List and create Promotion**: GET/POST `/retailer-panel/promotions/`
 
 ### Shopper Panel
-- **Dashboard**: `/shopper-panel/dashboard/`
-- **Add to Cart**: `/shopper-panel/cart/add/<int:item_id>/`
-- **View Cart**: `/shopper-panel/cart/`
+- **Shopper Dashboard**: GET `/shopper-panel/dashboard/`
+- **Add to Cart**: POST `/shopper-panel/cart/add/`
+- **Remove from Cart**: DELETE `/shopper-panel/cart/remove/`
+- **View Cart**: GET `/shopper-panel/cart/`
+- **Fetch Single Product**: GET `/shopper-panel/products/<int:pk>/`
+- **Fetch Products Belonging to a Retailer**: GET `/shopper-panel/retailers/<int:retailer_id>/products/`
 
 ### Admin Panel
 - **Dashboard**: `/admin-panel/dashboard/`

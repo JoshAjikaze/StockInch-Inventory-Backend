@@ -1,7 +1,6 @@
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from inventory.models import InventoryItem
-from inventory.serializers import CartItemSerializer 
+from inventory.serializers import CartItemSerializer, InventoryItemSerializer
 from .models import ShopperCart, ShopperCartItem
 from .forms import AddToCartForm
 from rest_framework.views import APIView
@@ -13,14 +12,7 @@ from rest_framework import status
 def is_admin(user):
     return user.is_authenticated and user.role == 'admin'
 
-@login_required
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def shopper_dashboard(request):
-    if request.user.role != 'shopper' and not is_admin(request.user):
-        return Response({"error": "Unauthorized access"}, status=status.HTTP_403_FORBIDDEN)
-    return Response({"message": "Welcome to the Shopper Dashboard"}, status=status.HTTP_200_OK)
-
+# Shopper Dashboard View
 class ShopperDashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -31,73 +23,73 @@ class ShopperDashboardView(APIView):
         response_data = {
             'cart_items': cart_items,
             'inventory_items': inventory_items,
-           
         }
 
-        return Response(response_data)
+        return Response(response_data, status=status.HTTP_200_OK)
 
-@login_required
+# Add to Cart View
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_to_cart(request):
-    if request.user.role != 'shopper' and not is_admin(request.user):
-        return Response({"error": "Unauthorized access"}, status=status.HTTP_403_FORBIDDEN)
-    form = AddToCartForm(request.data)
-    if form.is_valid():
-        cart_item = form.save(commit=False)
-        cart, created = ShopperCart.objects.get_or_create(shopper=request.user)
-        cart_item.cart = cart
-        cart_item.save()
-        return Response({"message": "Item added to cart successfully"}, status=status.HTTP_201_CREATED)
-    return Response({"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
+    inventory_item_id = request.data.get('inventory_item_id')
+    quantity = request.data.get('quantity', 1)
 
-class AddToCartView(APIView):
-    permission_classes = [IsAuthenticated]
+    try:
+        inventory_item = InventoryItem.objects.get(id=inventory_item_id)
+    except InventoryItem.DoesNotExist:
+        return Response({"error": "Inventory item not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    def post(self, request, *args, **kwargs):
-        inventory_item_id = request.data.get('inventory_item_id')
-        quantity = request.data.get('quantity', 1)
+    cart, created = ShopperCart.objects.get_or_create(shopper=request.user)
+    cart_item, created = ShopperCartItem.objects.get_or_create(cart=cart, inventory_item=inventory_item)
+    cart_item.quantity += int(quantity)
+    cart_item.save()
 
-        try:
-            inventory_item = InventoryItem.objects.get(id=inventory_item_id)
-        except InventoryItem.DoesNotExist:
-            return Response({"error": "Inventory item not found."}, status=status.HTTP_404_NOT_FOUND)
+    return Response({"success": "Item added to cart."}, status=status.HTTP_201_CREATED)
 
-        cart, created = ShopperCart.objects.get_or_create(shopper=request.user)
-        cart_item, created = ShopperCartItem.objects.get_or_create(cart=cart, item=inventory_item)
-        cart_item.quantity += quantity
-        cart_item.save()
+# Remove from Cart View
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def remove_from_cart(request):
+    inventory_item_id = request.data.get('inventory_item_id')
 
-        return Response({"success": "Item added to cart."}, status=status.HTTP_200_OK)
+    try:
+        inventory_item = InventoryItem.objects.get(id=inventory_item_id)
+    except InventoryItem.DoesNotExist:
+        return Response({"error": "Inventory item not found."}, status=status.HTTP_404_NOT_FOUND)
 
-@login_required
+    cart = get_object_or_404(ShopperCart, shopper=request.user)
+    cart_item = get_object_or_404(ShopperCartItem, cart=cart, inventory_item=inventory_item)
+    cart_item.delete()
+
+    return Response({"success": "Item removed from cart."}, status=status.HTTP_200_OK)
+
+# View Cart View
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_cart(request):
-    if request.user.role != 'shopper' and not is_admin(request.user):
-        return Response({"error": "Unauthorized access"}, status=status.HTTP_403_FORBIDDEN)
     cart = get_object_or_404(ShopperCart, shopper=request.user)
     cart_items = ShopperCartItem.objects.filter(cart=cart)
-    cart_items_data = [
-        {
-            "item_id": item.id,
-            "item_name": item.inventory_item.name,
-            "quantity": item.quantity
-        }
-        for item in cart_items
-    ]
-    return Response({"cart_items": cart_items_data}, status=status.HTTP_200_OK)
+    serializer = CartItemSerializer(cart_items, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-class ViewCartView(APIView):
+# Fetch Single Product View
+class ProductDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, pk):
         try:
-            cart = ShopperCart.objects.get(shopper=request.user)
-        except ShopperCart.DoesNotExist:
-            return Response({"error": "Cart not found."}, status=status.HTTP_404_NOT_FOUND)
+            product = InventoryItem.objects.get(pk=pk)
+        except InventoryItem.DoesNotExist:
+            return Response({"error": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        cart_items = ShopperCartItem.objects.filter(cart=cart)
-        serializer = CartItemSerializer(cart_items, many=True)
+        serializer = InventoryItemSerializer(product)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+# Fetch Products Belongin to a Retailer
+class RetailerProductListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, retailer_id):
+        products = InventoryItem.objects.filter(owner_id=retailer_id)
+        serializer = InventoryItemSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
