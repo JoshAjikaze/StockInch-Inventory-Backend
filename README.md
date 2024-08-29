@@ -38,9 +38,12 @@ This project is an Inventory Management System built with Django. It allows reta
 - **Upload Inventory**: `/api/upload-inventory/`
 
 ### Shopper Panel
-- **Dashboard**: `/shopper-panel/dashboard/`
-- **Add to Cart**: `/shopper-panel/cart/add/<int:item_id>/`
-- **View Cart**: `/shopper-panel/cart/`
+- **Shopper Dashboard**: GET `/shopper-panel/dashboard/`
+- **Add to Cart**: POST `/shopper-panel/cart/add/`
+- **Remove from Cart**: DELETE `/shopper-panel/cart/remove/`
+- **View Cart**: GET `/shopper-panel/cart/`
+- **Fetch Single Product**: GET `/shopper-panel/products/<int:pk>/`
+- **Fetch Products Belonging to a Retailer**: GET `/shopper-panel/retailers/<int:retailer_id>/products/`
 
 ### Admin Panel
 - **Dashboard**: `/admin-panel/dashboard/`
