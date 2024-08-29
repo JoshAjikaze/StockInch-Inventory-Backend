@@ -31,11 +31,13 @@ This project is an Inventory Management System built with Django. It allows reta
 - **Login**: `/accounts/api/login/`
 
 ### Retailer Panel
-- **Dashboard**: `/retailer-panel/dashboard/`
-- **Add Inventory**: `/retailer-panel/inventory/add/`
-- **Update Inventory**: `/retailer-panel/inventory/update/<int:item_id>/`
-- **Delete Inventory**: `/retailer-panel/inventory/delete/<int:item_id>/`
+- **Dashboard**: GET `/retailer-panel/dashboard/`
+- **Add Inventory**: POST `/retailer-panel/inventory/add/`
+- **List Inventory** GET `/retailer-panel/inventory/`
+- **Update Inventory**: PUT/PATCH `/retailer-panel/inventory/<int:pk>/`
+- **Delete Inventory**: DELETE `/retailer-panel/inventory/<int:pk>/`
 - **Upload Inventory**: `/api/upload-inventory/`
+- **List and create Promotion**: GET/POST `/retailer-panel/promotions/`
 
 ### Shopper Panel
 - **Shopper Dashboard**: GET `/shopper-panel/dashboard/`
