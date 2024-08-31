@@ -2,7 +2,6 @@ from django.shortcuts import get_object_or_404
 from inventory.models import InventoryItem
 from inventory.serializers import CartItemSerializer, InventoryItemSerializer
 from .models import ShopperCart, ShopperCartItem
-from .forms import AddToCartForm
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -12,12 +11,12 @@ from rest_framework import status
 def is_admin(user):
     return user.is_authenticated and user.role == 'admin'
 
-# Shopper Dashboard View
+
 class ShopperDashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        cart_items = ShopperCart.objects.filter(shopper=request.user).count()
+        cart_items = ShopperCartItem.objects.filter(cart__shopper=request.user).count() 
         inventory_items = InventoryItem.objects.filter(stock__gt=0).count()
 
         response_data = {
@@ -27,7 +26,7 @@ class ShopperDashboardView(APIView):
 
         return Response(response_data, status=status.HTTP_200_OK)
 
-# Add to Cart View
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_to_cart(request):
@@ -46,7 +45,7 @@ def add_to_cart(request):
 
     return Response({"success": "Item added to cart."}, status=status.HTTP_201_CREATED)
 
-# Remove from Cart View
+
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def remove_from_cart(request):
@@ -63,7 +62,7 @@ def remove_from_cart(request):
 
     return Response({"success": "Item removed from cart."}, status=status.HTTP_200_OK)
 
-# View Cart View
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_cart(request):
@@ -72,7 +71,7 @@ def view_cart(request):
     serializer = CartItemSerializer(cart_items, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# Fetch Single Product View
+
 class ProductDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -85,7 +84,7 @@ class ProductDetailView(APIView):
         serializer = InventoryItemSerializer(product)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-# Fetch Products Belongin to a Retailer
+
 class RetailerProductListView(APIView):
     permission_classes = [IsAuthenticated]
 
