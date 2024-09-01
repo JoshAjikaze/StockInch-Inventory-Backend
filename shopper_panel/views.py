@@ -2,11 +2,13 @@ from django.shortcuts import get_object_or_404
 from inventory.models import InventoryItem
 from inventory.serializers import CartItemSerializer, InventoryItemSerializer
 from .models import ShopperCart, ShopperCartItem
+from accounts.models import CustomUser
+from accounts.serializers import CustomUserSerializer
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 
 def is_admin(user):
     return user.is_authenticated and user.role == 'admin'
@@ -25,6 +27,14 @@ class ShopperDashboardView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_200_OK)
+
+class ShopperEditProfileView(generics.RetrieveUpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
 
 
 @api_view(['POST'])
