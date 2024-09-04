@@ -37,6 +37,7 @@ class ShopperEditProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_to_cart(request):
@@ -50,7 +51,7 @@ def add_to_cart(request):
 
     cart, created = ShopperCart.objects.get_or_create(shopper=request.user)
     cart_item, created = ShopperCartItem.objects.get_or_create(cart=cart, inventory_item=inventory_item)
-    cart_item.quantity += int(quantity)
+    cart_item.quantity = int(quantity)
     cart_item.save()
 
     return Response({"success": "Item added to cart."}, status=status.HTTP_201_CREATED)
@@ -82,6 +83,7 @@ def view_cart(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
 class ProductDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -95,6 +97,7 @@ class ProductDetailView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
 class RetailerProductListView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -102,3 +105,4 @@ class RetailerProductListView(APIView):
         products = InventoryItem.objects.filter(owner_id=retailer_id)
         serializer = InventoryItemSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+

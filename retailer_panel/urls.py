@@ -2,13 +2,14 @@ from django.urls import path
 from .views import (
     RetailerDashboardView, InventoryListCreateView, InventoryDetailView,
     InventoryCreateView, InventoryUpdateView, InventoryDeleteView,
-    PromotionListCreateView, PromotionDetailView
+    PromotionListCreateView, PromotionDetailView, RetailerEditProfileView
 )
 
 app_name = 'retailer_panel'
 
 urlpatterns = [
     path('dashboard/', RetailerDashboardView.as_view(), name='retailer_dashboard'),
+    path('profile/edit/', RetailerEditProfileView.as_view(), name='retailer_edit_profile'),
     path('inventory/', InventoryListCreateView.as_view(), name='inventory_list_create'),
     path('inventory/add/', InventoryCreateView.as_view(), name='inventory_create'),
     path('inventory/<int:pk>/', InventoryDetailView.as_view(), name='inventory_detail'),

@@ -32,6 +32,7 @@ This project is an Inventory Management System built with Django. It allows reta
 
 ### Retailer Panel
 - **Dashboard**: GET `/retailer-panel/dashboard/`
+- **Retailer Edit Profile** : PUT `retailer-panel/profile/edit/`
 - **Add Inventory**: POST `/retailer-panel/inventory/add/`
 - **List Inventory** GET `/retailer-panel/inventory/`
 - **Update Inventory**: PUT/PATCH `/retailer-panel/inventory/<int:pk>/`
@@ -41,6 +42,7 @@ This project is an Inventory Management System built with Django. It allows reta
 
 ### Shopper Panel
 - **Shopper Dashboard**: GET `/shopper-panel/dashboard/`
+- **Shopper Edit Profile** : PUT `shopper-panel/profile/edit/`
 - **Add to Cart**: POST `/shopper-panel/cart/add/`
 - **Remove from Cart**: DELETE `/shopper-panel/cart/remove/`
 - **View Cart**: GET `/shopper-panel/cart/`

@@ -3,8 +3,9 @@ from accounts.models import CustomUser
 from inventory.models import InventoryItem
 
 class ShopperCart(models.Model):
-    shopper = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='shopper_panel_carts')
-    items = models.ManyToManyField(InventoryItem, through='ShopperCartItem')
+    shopper = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    cart_items = models.ManyToManyField(InventoryItem, through='ShopperCartItem', related_name='shopper_cart_items')
+
 
 class ShopperCartItem(models.Model):
     cart = models.ForeignKey(ShopperCart, on_delete=models.CASCADE, related_name='shopper_panel_cart_items')
