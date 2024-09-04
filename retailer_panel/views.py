@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from inventory.models import Promotion, InventoryItem
 from inventory.serializers import InventoryItemSerializer, PromotionSerializer
+from accounts.serializers import CustomUserSerializer
 from .forms import InventoryItemForm
 from accounts.models import CustomUser
 from django.db.models import Sum
@@ -34,6 +35,14 @@ class RetailerDashboardView(APIView):
             'total_promotions': total_promotions,
         }
         return Response(response_data)
+
+class RetailerEditProfileView(generics.RetrieveUpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
 
 
 class InventoryListCreateView(generics.ListCreateAPIView):

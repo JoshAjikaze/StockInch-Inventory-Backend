@@ -1,12 +1,13 @@
 from django.urls import path
 from .views import (
-   ShopperDashboardView, add_to_cart, remove_from_cart, view_cart, ProductDetailView, RetailerProductListView
+   ShopperDashboardView, ShopperEditProfileView, add_to_cart, remove_from_cart, view_cart, ProductDetailView, RetailerProductListView
 )
 
 app_name = 'shopper_panel'
 
 urlpatterns = [
-   path('dashboard/', ShopperDashboardView.as_view(), name='shopper_dashboard'),
+    path('dashboard/', ShopperDashboardView.as_view(), name='shopper_dashboard'),
+    path('profile/edit/', ShopperEditProfileView.as_view(), name='shopper_edit_profile'),
     path('cart/add/', add_to_cart, name='add_to_cart'),
     path('cart/remove/', remove_from_cart, name='remove_from_cart'),
     path('cart/', view_cart, name='view_cart'),

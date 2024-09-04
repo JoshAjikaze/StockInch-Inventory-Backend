@@ -14,6 +14,7 @@ class InventoryItemSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.image.url)
         return None
 
+
 class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
@@ -44,17 +45,20 @@ class InventoryCartSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
 class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShopperCartItem
-        fields = ['id', 'item', 'quantity']
+        fields = ['id', 'inventory_item', 'quantity']
+
 
 class CartSerializer(serializers.ModelSerializer):
-    items = CartItemSerializer(many=True)
+    cart_items = CartItemSerializer(many=True)
 
     class Meta:
         model = ShopperCart
-        fields = ['id', 'user', 'items']
+        fields = ['id', 'shopper', 'cart_items']
+
         
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
