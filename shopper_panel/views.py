@@ -83,7 +83,6 @@ def view_cart(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
 class ProductDetailView(APIView):
     permission_classes = [IsAuthenticated]
 

@@ -45,21 +45,22 @@ class InventoryCartSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class CartItemSerializer(serializers.ModelSerializer):
+    inventory_item = InventoryItemSerializer()
+
     class Meta:
         model = ShopperCartItem
         fields = ['id', 'inventory_item', 'quantity']
 
 
 class CartSerializer(serializers.ModelSerializer):
-    cart_items = CartItemSerializer(many=True)
+    cart_items = CartItemSerializer(many=True, source='shopper_cart_items')
 
     class Meta:
         model = ShopperCart
         fields = ['id', 'shopper', 'cart_items']
 
-        
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
