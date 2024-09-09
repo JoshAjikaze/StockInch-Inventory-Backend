@@ -118,6 +118,7 @@ def create_inventory(request):
             promotion=data.get('promotion', ''),
             location=data['location'],
             owner=request.user,
+            image = data['image_url', '']
         )
         return JsonResponse({'success': 'Inventory item created successfully', 'item': InventoryItemSerializer(item).data})
     return JsonResponse({'error': 'Invalid request method'}, status=400)
