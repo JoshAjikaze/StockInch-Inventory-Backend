@@ -6,13 +6,14 @@ class InventoryItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InventoryItem
-        fields = ['id', 'name', 'description', 'price', 'stock', 'quantity', 'promotion', 'location', 'category', 'owner', 'image_url']
+        fields = ['id', 'name', 'description', 'price', 'stock', 'quantity', 'promotion', 'location', 'category', 'owner', 'image', 'image_url']
 
     def get_image_url(self, obj):
         request = self.context.get('request')
         if obj.image and hasattr(obj.image, 'url'):
-            return request.build_absolute_uri(obj.image.url)
+            return request.build_absolute_uri(obj.image.url) if request else obj.image.url
         return None
+
 
 
 class OrderItemSerializer(serializers.ModelSerializer):

@@ -96,12 +96,13 @@ class InventoryUpdateView(generics.UpdateAPIView):
 def delete_inventory(request, item_id):
     if request.user.role != 'retailer' and not is_admin(request.user):
         return JsonResponse({'error': 'Unauthorized access'}, status=403)
-    
+
     inventory_item = get_object_or_404(InventoryItem, id=item_id, owner=request.user)
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         inventory_item.delete()
         return JsonResponse({'success': 'Inventory item deleted successfully'}, status=200)
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 
 class InventoryDeleteView(generics.DestroyAPIView):
     queryset = InventoryItem.objects.all()
