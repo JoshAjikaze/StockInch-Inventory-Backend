@@ -33,4 +33,6 @@ urlpatterns = [
     path('inventory/delete/<int:item_id>/', delete_inventory_view, name='delete_inventory'),
     path('inventory/add/', add_inventory_view, name='add_inventory'),
     path('search/', views.search_view, name='search'),
+    path('notify_users/', views.send_email_to_users, name='send_email_to_users'),
+
 ]

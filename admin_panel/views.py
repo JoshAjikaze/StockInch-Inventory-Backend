@@ -161,3 +161,18 @@ def search_view(request):
     }
     return render(request, 'admin_panel/search_results.html', context)
 
+
+def send_email_to_users(request):
+    if request.method == 'POST':
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+        User = get_user_model()
+        recipients = list(User.objects.values_list('email', flat=True))
+        
+        emails = [(subject, message, 'admin_test@stockinch.com', [recipient]) for recipient in recipients]
+        send_mass_mail(emails, fail_silently=False)
+        
+        messages.success(request, 'Email sent successfully to all users.')
+        return redirect('admin_panel:dashboard')
+
+

@@ -6,44 +6,186 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Admin Panel{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin_panel.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
     <style>
-        /* Custom styles */
-        .content {
-            margin: 20px;
+        
+        * {
+            box-sizing: border-box;
         }
-        .nav-link.active {
-            font-weight: bold;
+
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: #343a40;
+        }
+
+       
+        .sidebar {
+            position: fixed;
+            top: 56px; 
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 56px); 
+            background-color: #343a40;
+            padding-top: 20px;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar a {
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+        }
+
+        .sidebar a i {
+            margin-right: 10px;
+        }
+
+        .sidebar a:hover {
+            background-color: #575757;
+        }
+
+        
+        .content {
+            margin-left: 250px; 
+            padding-top: 80px;  
+            min-height: 100vh;  
+            width: calc(100% - 250px); 
+            overflow: auto;
+}
+
+
+        
+        footer {
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            padding: 10px;
+            background-color: #f1f1f1;
+            text-align: center;
+            margin-top: auto;
+        }
+
+       
+        .user-info {
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .logo img {
+            width: 100px;
+            height: auto;
+        }
+
+
+        .logout-btn {
+            margin-top: 20px;
         }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="{% url 'admin_panel:dashboard' %}">Admin Panel</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'admin_panel:dashboard' %}">Dashboard</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'categories_view' %}active{% endif %}" href="{% url 'admin_panel:categories_view' %}">Categories</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'users_view' %}active{% endif %}" href="{% url 'admin_panel:users_view' %}">Users</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if request.resolver_match.url_name == 'inventory_view' %}active{% endif %}" href="{% url 'admin_panel:inventory_view' %}">Inventory</a>
-                </li>
             </ul>
+            <!-- Search form -->
+           
+        <form class="form-inline my-2 my-lg-0" action="/search/" method="GET">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" name="Q" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
+
+        <div class="ml-auto">
+            <span id="currentTime"></span>
+        </div>
+        
         </div>
     </nav>
-    <div class="content container-fluid">
-        {% block content %}{% endblock %}
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- <div class="logo">
+            <a href="{% url 'admin_panel:dashboard' %}">
+                <img src="{% static 'media/img/logo.png' %}" alt="Logo" class="img-fluid">
+            </a>
+        </div> -->
+        <div class="user-info">
+            <h5>Welcome {{ user.name }}
+            </h5>
+        </div>
+
+        <a href="{% url 'admin_panel:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+        <a href="{% url 'admin_panel:categories_view' %}" class="{% if request.resolver_match.url_name == 'categories_view' %}active{% endif %}">
+            <i class="fas fa-tags"></i> Categories
+        </a>
+        <a href="{% url 'admin_panel:users' %}" class="{% if request.resolver_match.url_name == 'users_view' %}active{% endif %}">
+            <i class="fas fa-users"></i> Users
+        </a>
+        <a href="{% url 'admin_panel:inventory_view' %}" class="{% if request.resolver_match.url_name == 'inventory_view' %}active{% endif %}">
+            <i class="fas fa-boxes"></i> Inventory
+        </a>
+        <li class="nav-item">
+            <a class="nav-link" href="" data-toggle="modal" data-target="#emailModal">
+                <i class="fas fa-envelope"></i> Notify Users
+            </a>
+        </li>
+        
+
+
+
+
+        <a href="{% url 'logout' %}" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
     </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        {% block content %}
+        <!-- Placeholder content for testing -->
+        <p>Welcome to your dashboard {{user.name}}.</p>
+        
+        {% endblock %}
+    </div>
+
+    
+    <footer>
+        <p>&copy; Stockinch 2024</p>
+    </footer>
+    <script>
+        function updateTime() {
+            var now = new Date();
+            var date = now.toLocaleDateString();
+            var time = now.toLocaleTimeString();
+            document.getElementById('currentTime').innerHTML = date + ' ' + time;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();  
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
