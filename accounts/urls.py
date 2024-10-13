@@ -19,4 +19,6 @@ urlpatterns = [
     path('api/login/', CustomUserLoginView.as_view(), name='api_login'),  
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # JWT token obtain endpoint
     path('api/profile/', UserProfileView.as_view(), name='api_profile'),  
+    path('activate/<uidb64>/<token>/', views.activate_account, name='activate'),
+    path('api/update-password/', views.update_password, name='update_password'),
 ]

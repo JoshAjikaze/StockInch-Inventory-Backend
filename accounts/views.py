@@ -11,10 +11,18 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth import update_session_auth_hash
 from .forms import UserProfileForm
 from .serializers import UserProfileSerializer
 
-
+# Custom User Registration View
 @method_decorator(csrf_exempt, name='dispatch')
 class CustomUserRegistrationView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -30,7 +38,18 @@ class CustomUserRegistrationView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+class SignUpView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    template_name = 'registration/signup.html'
+    success_url = reverse_lazy('accounts:login')
 
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.save()
+        return super().form_valid(form)
+    
+# Custom User Login View
 @method_decorator(csrf_exempt, name='dispatch')
 class CustomUserLoginView(APIView):
     permission_classes = [AllowAny]
@@ -48,7 +67,7 @@ class CustomUserLoginView(APIView):
         return JsonResponse({"error": "Invalid Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-
+# User Profile Update View
 @method_decorator(csrf_exempt, name='dispatch')
 class UserProfileUpdateView(generics.RetrieveUpdateAPIView):
     queryset = CustomUser.objects.all()
@@ -59,7 +78,7 @@ class UserProfileUpdateView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
 
-
+# Profile View (Read-Only)
 class UserProfileView(generics.RetrieveAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -68,7 +87,7 @@ class UserProfileView(generics.RetrieveAPIView):
         return self.request.user
 
 
-
+# Update Profile Function-Based View (Can be Deprecated)
 @csrf_exempt
 @login_required
 def update_profile(request):
@@ -85,9 +104,53 @@ def update_profile(request):
         return JsonResponse({"form": form}, status=status.HTTP_200_OK)
 
 
-
+# Profile Function-Based View
 @login_required
 def profile(request):
     return JsonResponse({
         "user": CustomUserSerializer(request.user).data
     }, status=status.HTTP_200_OK)
+
+#email verification view
+def send_verification_email(request, user):
+    current_site = get_current_site(request)
+    subject = 'Activate Your Account'
+    message = render_to_string('registration/activation_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+        'token': default_token_generator.make_token(user),
+    })
+    user.email_user(subject, message)
+    
+
+def activate_account(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = CustomUser.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        return JsonResponse({'message': 'Account activated successfully.'}, status=200)
+    else:
+        return JsonResponse({'error': 'Activation link is invalid.'}, status=400)
+    
+#Password update
+@csrf_exempt
+@login_required
+def update_password(request):
+    if request.method == 'POST':
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+        
+        if new_password == confirm_password:
+            request.user.set_password(new_password)
+            request.user.save()
+            update_session_auth_hash(request, request.user)  # To prevent session invalidation
+            return JsonResponse({'success': 'Password updated successfully.'}, status=200)
+        else:
+            return JsonResponse({'error': 'Passwords do not match.'}, status=400)
+    return JsonResponse({'error': 'Invalid request method.'}, status=400)
