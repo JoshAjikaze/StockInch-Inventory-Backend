@@ -6,6 +6,8 @@ This project is an Inventory Management System built with Django. It allows reta
 
 ## Features
 
+
+
 ### Retailer Panel
 - **Dashboard**: Overview of inventory items.
 - **Add Inventory**: Form to add new inventory items.
@@ -29,6 +31,13 @@ This project is an Inventory Management System built with Django. It allows reta
 ### Authentication
 - **Register**: `/accounts/api/register/`
 - **Login**: `/accounts/api/login/`
+
+### Account
+- **Token Obtain Pair**: POST `/accounts/api/token/`
+- **View Profile**: GET `/accounts/api/profile/`
+- **Update Profile**: POST `/accounts/profile/update/`
+- **Activate Account**: GET `/accounts/activate/<uidb64>/<token>/`
+- **Password Update**: POST `/accounts/api/update-password/`
 
 ### Retailer Panel
 - **Dashboard**: GET `/retailer-panel/dashboard/`
@@ -116,4 +125,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 -pending (_)
+
+
+
 
